@@ -28,7 +28,8 @@ pdb_file = st.sidebar.file_uploader("Upload PDB File", type=['pdb'])
 custom_aptamer = st.sidebar.text_input("Enter Custom Aptamer Label", "APT-CUSTOM")
 
 # Sidebar filters
-selected_aptamer = st.sidebar.selectbox("Select Aptamer", ['APT-IV', 'APT-VI', 'APT-VII', custom_aptamer])
+aptamer_list = data['Aptamer'].unique().tolist()
+selected_aptamers = st.sidebar.multiselect("Select Aptamer(s)", aptamer_list, default=aptamer_list)
 variants = st.sidebar.multiselect("Select EGFR Variant(s)", ['Wild-Type', 'L858R', 'T790M', 'Custom'], default=['Wild-Type', 'L858R', 'T790M'])
 score_threshold = st.sidebar.slider("Minimum Binding Score (stronger = more negative)", -250, -150, -220)
 
@@ -57,14 +58,13 @@ if pdb_file:
 
     # Save or append
     if 'uploaded_data' not in st.session_state:
-        st.session_state.uploaded_data = new_row
-    else:
-        st.session_state.uploaded_data = pd.concat([st.session_state.uploaded_data, new_row], ignore_index=True)
+    st.session_state.uploaded_data = pd.DataFrame(columns=[
+        'Aptamer', 'EGFR_Variant', 'Docking_Score', 'Confidence_Score',
+        'Binding_Score', 'Num_Interactions', 'Hydrogen_Bonds',
+        'Salt_Bridges', 'Pi_Stacking', 'Stability_Score', 'Mutation_Impact'
+    ])
 
-    data = st.session_state.uploaded_data.copy()
-else:
-    data = st.session_state.get('uploaded_data', pd.DataFrame())
-
+data = st.session_state.uploaded_data.copy()
 
 # Filtered data
 filtered_data = data[(data['Aptamer'] == selected_aptamer) & (data['EGFR_Variant'].isin(variants)) & (data['Binding_Score'] <= score_threshold)]
