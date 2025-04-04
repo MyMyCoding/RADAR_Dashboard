@@ -27,6 +27,16 @@ st.sidebar.header("Upload Custom EGFR Variant")
 pdb_file = st.sidebar.file_uploader("Upload PDB File", type=['pdb'])
 custom_aptamer = st.sidebar.text_input("Enter Custom Aptamer Label", "APT-CUSTOM")
 
+# Ensure session state holds data even before any upload
+if 'uploaded_data' not in st.session_state:
+    st.session_state.uploaded_data = pd.DataFrame(columns=[
+        'Aptamer', 'EGFR_Variant', 'Docking_Score', 'Confidence_Score',
+        'Binding_Score', 'Num_Interactions', 'Hydrogen_Bonds',
+        'Salt_Bridges', 'Pi_Stacking', 'Stability_Score', 'Mutation_Impact'
+    ])
+
+data = st.session_state.uploaded_data.copy()
+
 # Sidebar filters
 aptamer_list = data['Aptamer'].unique().tolist()
 selected_aptamers = st.sidebar.multiselect("Select Aptamer(s)", aptamer_list, default=aptamer_list)
