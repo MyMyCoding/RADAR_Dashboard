@@ -42,7 +42,7 @@ with st.expander("View Structure"):
     xyzview = py3Dmol.view(width=600, height=400)
     if pdb_file:
         pdb_string = pdb_file.read().decode("utf-8")
-        xyzview.setBackgroundColor('white')
+        xyzview.setBackgroundColor('black')
         xyzview.addModel(pdb_string, 'pdb')
         xyzview.setStyle({'cartoon': {'color': 'spectrum'}})
         xyzview.zoomTo()
