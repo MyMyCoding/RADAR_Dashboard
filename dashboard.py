@@ -90,16 +90,25 @@ st.dataframe(data[['Aptamer', 'EGFR_Variant', 'Docking_Score', 'Confidence_Score
 
 # 3D Structure Viewer
 st.subheader("3D Structure Viewer")
-with st.expander("View Structure"):
-  xyzview = py3Dmol.view(width=400, height=400)
-xyzview.setBackgroundColor('white')
+
+pdb_string = ""
 if pdb_file:
     pdb_string = pdb_file.read().decode("utf-8")
-    xyzview.addModel(pdb_string, 'pdb')
-else:
-    xyzview.addModel(\"\"\"ATOM      1  N   ASN A   1      38.428  13.172   4.820  1.00 46.26           N
+
+with st.expander("View Structure"):
+    xyzview = py3Dmol.view(width=400, height=400)
+    xyzview.setBackgroundColor('white')
+
+    if pdb_string:
+        xyzview.addModel(pdb_string, 'pdb')
+    else:
+        xyzview.addModel("""ATOM      1  N   ASN A   1      38.428  13.172   4.820  1.00 46.26           N
 ATOM      2  CA  ASN A   1      39.764  12.662   5.195  1.00 46.46           C
-END\"\"\", 'pdb')
+END""", 'pdb')
+
+    xyzview.setStyle({'cartoon': {'color': 'spectrum'}})
+    xyzview.zoomTo()
+    st.components.v1.html(xyzview._make_html(), height=400)
 
 
 # Heatmap
