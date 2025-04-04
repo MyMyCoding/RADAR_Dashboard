@@ -77,7 +77,11 @@ if pdb_file:
 data = st.session_state.uploaded_data.copy()
 
 # Filtered data
-filtered_data = data[(data['Aptamer'] == selected_aptamer) & (data['EGFR_Variant'].isin(variants)) & (data['Binding_Score'] <= score_threshold)]
+filtered_data = data[
+    (data['Aptamer'].isin(selected_aptamers)) &
+    (data['EGFR_Variant'].isin(variants)) &
+    (data['Binding_Score'] <= score_threshold)
+]
 
 # Display table
 st.subheader("Interaction Summary")
