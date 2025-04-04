@@ -33,7 +33,6 @@ variants = st.sidebar.multiselect("Select EGFR Variant(s)", ['Wild-Type', 'L858R
 score_threshold = st.sidebar.slider("Minimum Binding Score (stronger = more negative)", -250, -150, -220)
 
 if pdb_file:
-if pdb_file:
     # Simulate interaction analysis
     h_bonds = np.random.randint(10, 20)
     salt_bridges = np.random.randint(1, 4)
