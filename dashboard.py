@@ -58,7 +58,7 @@ if pdb_file:
 
     # Save or append
     if 'uploaded_data' not in st.session_state:
-    st.session_state.uploaded_data = pd.DataFrame(columns=[
+        st.session_state.uploaded_data = pd.DataFrame(columns=[
         'Aptamer', 'EGFR_Variant', 'Docking_Score', 'Confidence_Score',
         'Binding_Score', 'Num_Interactions', 'Hydrogen_Bonds',
         'Salt_Bridges', 'Pi_Stacking', 'Stability_Score', 'Mutation_Impact'
