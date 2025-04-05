@@ -20,7 +20,6 @@ aptamer_file = st.file_uploader("Upload Aptamer", type=["fasta", "txt"])
 if aptamer_file:
     content = aptamer_file.read().decode("utf-8")
     
-    # Optional: Parse FASTA header + sequence
     if content.startswith(">"):
         lines = content.strip().split("\n")
         header = lines[0].replace(">", "")
@@ -29,9 +28,18 @@ if aptamer_file:
         header = "Custom Aptamer"
         sequence = content.strip()
 
-    st.text_area("Aptamer Sequence", sequence, height=150)
-    st.success(f"Aptamer '{header}' uploaded successfully!")
-    
+    # Validate sequence (basic ACGT/N check)
+    import re
+    if not re.match("^[ACGTUNacgtun]+$", sequence):
+        st.warning("This doesn't look like a valid DNA/RNA sequence.")
+    else:
+        st.markdown(f"**Aptamer Name:** `{header}`")
+        st.text_area("Aptamer Sequence", sequence, height=150)
+        st.success(f"Aptamer '{header}' uploaded successfully!")
+
+        # Store for later use
+        st.session_state["aptamer_seq"] = sequence
+        st.session_state["aptamer_name"] = header
 # Simulate Docking & Interaction
 st.subheader("3. Simulated Docking & Interaction")
 if st.button("Run Docking (Simulated)"):
