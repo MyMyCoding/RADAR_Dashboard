@@ -14,12 +14,24 @@ view.zoomTo()
 view.show()
 
 # Aptamer Upload
-st.subheader("2. Upload Aptamer Sequence (FASTA)")
-aptamer_file = st.file_uploader("Upload Aptamer", type=["txt", "fasta"])
-if aptamer_file:
-    aptamer_seq = aptamer_file.read().decode("utf-8")
-    st.text_area("Aptamer Sequence:", aptamer_seq)
+st.subheader("2. Upload Aptamer Sequence (FASTA or TXT)")
+aptamer_file = st.file_uploader("Upload Aptamer", type=["fasta", "txt"])
 
+if aptamer_file:
+    content = aptamer_file.read().decode("utf-8")
+    
+    # Optional: Parse FASTA header + sequence
+    if content.startswith(">"):
+        lines = content.strip().split("\n")
+        header = lines[0].replace(">", "")
+        sequence = "".join(lines[1:])
+    else:
+        header = "Custom Aptamer"
+        sequence = content.strip()
+
+    st.text_area("Aptamer Sequence", sequence, height=150)
+    st.success(f"Aptamer '{header}' uploaded successfully!")
+    
 # Simulate Docking & Interaction
 st.subheader("3. Simulated Docking & Interaction")
 if st.button("Run Docking (Simulated)"):
